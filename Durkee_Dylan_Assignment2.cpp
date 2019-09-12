@@ -141,6 +141,9 @@ int main()
       //Prompt user for amount of item they wish to purchase until valid input entered.
       while (cin.fail() || amountToShip < 1 || amountToShip > productList[itemLocation].quantitiesInStock)
 	{
+	  cin.clear();
+	  cin.ignore(100, '\n');
+
 	  cout << "Enter amount to ship: ";
 	  cin >> amountToShip;
 	  cout << endl;
