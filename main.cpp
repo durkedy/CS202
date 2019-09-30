@@ -1,196 +1,225 @@
-/*
-Dylan Durkee - Assigment 3
-Dr. Jimi Vasko
-warehouse main.cpp file
- */
-//include appropriate libraries to be used in program.
-#include <iomanip>
+/*************************
+Assignment 4 main.cpp file
+Dylan Durkee
+Dr. Jimi Andro-Vasko
+CS 202 - sec 1003
+ ************************/
+
+//Include appropriate header/libraries.
+#include "reversi.h"
 #include <iostream>
-#include <fstream>
 #include <string>
-#include "warehouse.h"
 using namespace std;
+
+//Main function prototypes, one to output board and
+//one to output player scores.
+void outputBoard(reversi, game, string);
+void outputPlayerScores(bool, bool, reversi);
+
 
 int main()
 {
 
-  //declare variable of type "warehouse" which stores inventory information from file,
-  //and contains all of the relevant member functions.
-  //Also declare ifstream variable to store file and string to store the file's name.
-  warehouse invList;
-  ifstream infile;
-  string filename;
+  //Declare variables of type reversi, game, and string.
+  //String variable "reversiBoard" contains the game board.
+  reversi newReversi;
+  game newGame;
+  string reversiBoard;
 
-  //Declare relevant variables to pass as parameters to the function displayProducts
-  string name;
-  int id;
-  string manu;
-  int quantity;
-  double price;
-  double discount;
+  cout << endl;
 
-  //Store number of shipments (orders) that the user wants.
-  int numShipments;
+  /*Declare two variables to represent p1 and p2, one int that
+    determines if the game is over and who wins, two wints to store
+    the coordinates typed in by user, and another bool to determine
+    if a player can make a move.
+   */
+  bool player1 = true;
+  bool player2 = false;
+  int gameIsOver = 2;
+  int coord1;
+  int coord2;
+  bool canMakeMove;
+  
+  //While game is not over (gameIsOver == 2), keep playing game.
+  while (gameIsOver == 2)
+    {
+      //Output board and player scores (these are user-defined functions in main)
+      outputBoard(newReversi, newGame, reversiBoard);
+      outputPlayerScores(player1, player2, newReversi);
 
-  //Prompt user to enter file and open file.
- do
-  {
-    cout << "Enter a file: ";
-    cin >> filename;
-    cout << endl;
-    
-    infile.open(filename.c_str());
-  }
- while (!infile.is_open());
+      
+      /*Determine if player1 can make a move by calling moveCanBeMade function from
+	reversi class. If p1 can make a move, prompt for coordinates and check 
+	validity of the coordinates. If coords are valid, update board.
+	If p1 can't make move, prompt player2 instead.
+       */
+      if (newReversi.moveCanBeMade(player1) == true){
+      cout << "Player 1: ";
+      cin >> coord1 >> coord2;
+      cout << endl;
 
- //Read in information from file, and store into the relevant variables/
- //Then, pass the variables as parameters to the warehouse function "addItem"
- //which will then store the information in the relevant members of the class.
- //Repeat this process until end of file is reached.
- do
-   {
-     infile >> name; 
-     infile >> id;
-     infile >> manu;
-     infile >> quantity;
-     infile >> price;
-     infile >> discount;
-     
-     invList.addItem(name, id, manu, quantity, price, discount);
-   }
- while (!infile.eof());
+      canMakeMove = newReversi.makeMove(coord1, coord2, player1);
+  
+      while (canMakeMove == false || cin.fail())
+	{
+	  cin.clear();
+	  cin.ignore(100, '\n');
 
- //Prompt user to enter amount of shipments in their order.
- cout << endl;
- cout << "Enter amount of shipments: ";
- cin >> numShipments;
- cout << endl;
+	  cout << "Player 1: ";
+	  cin >> coord1 >> coord2;
+	  cout << endl;
 
- //Check for input failure.
- while (cin.fail() || numShipments <= 0)
-   {
-     cin.clear();
-     cin.ignore(100, '\n');
+	  canMakeMove = newReversi.makeMove(coord1, coord2, player1);
+	  }
+      }
+      else if (newReversi.moveCanBeMade(player2) == true)
+	{
+	  cout << endl;
+	  cout << "Player 1 passes" << endl;
+	  
+	  cout << "Player 2: ";
+	  cin >> coord1 >> coord2;
+	  cout << endl;
 
-     cout << "Enter amount of shipments: ";
-     cin >> numShipments;
-     cout << endl;
-   }
+	  canMakeMove = newReversi.makeMove(coord1, coord2, player2);
+	  while (canMakeMove == false || cin.fail())
+	    {
+	      cin.clear();
+	      cin.ignore(100, '\n');
 
- //Declare relevant variables to store information.
- //orderNum and amountToShip will store the user's current order number
- //and the amount of the item the user wants to order, respectively.
- //itemNum stores the user's entered item id number, itemLocation
- //stores the index of the id if the entered id is valid, and itemPrice
- //and itemDiscount store the price and discount, respectively.
+	      cout << "Player 2: ";
+	      cin >> coord1 >> coord2;
+	      cout << endl;
 
- int orderNum = 1;
- int itemNum;
- int itemLocation;
- int itemPrice;
- int itemDiscount;
- int amountToShip;
- double totalCost = 0;
- double totalDiscounts = 0;
- int updateQuantity;
+	      canMakeMove = newReversi.makeMove(coord1, coord2, player2);
+	    }
+	}
+	  
+      //output board and scores.
+      outputBoard(newReversi, newGame, reversiBoard);
+      outputPlayerScores(player1, player2, newReversi);
+         
+      /*Determine if player2 can make a move by calling moveCanBeMade function from
+        reversi class. If p2 can make a move, prompt for coordinates and check
+        validity of the coordinates. If coords are valid, update board.
+        If p2 can't make move, prompt player1 instead.
+      */
 
- //Iterate through while loop until the user's number of shipments equals zero.
- //In other words, complete amount of orders that the user entered.
-while (numShipments != 0)
-   {
-     //Call class function to display the warehouse inventory menu to user.
-     invList.displayProducts();
+      if (newReversi.moveCanBeMade(player2) == true){  
+      cout << "Player 2: ";
+      cin >> coord1 >> coord2;
+      cout << endl;
+      
+      canMakeMove = newReversi.makeMove(coord1, coord2, player2);
+      while (canMakeMove == false || cin.fail())
+	{
+	  cin.clear();
+	  cin.ignore(100, '\n');
 
-     //Prompt user to enter id number. Store id number in itemNum.
-     cout << "(order " << orderNum << ") Enter item no: ";
-     cin >> itemNum;
-     cout << endl;
-     
-     //Get index location of user's itemNum. Call warehouse class "search" function.
-     itemLocation = invList.search(itemNum);
-     
-     //Check for input failure.
-     while (cin.fail() || itemLocation == -1)
-       {
-	 cin.clear();
-	 cin.ignore(100, '\n');
+	  cout << "Player 2: ";
+	  cin >> coord1 >> coord2;
+	  cout << endl;
 
-	 cout << "Item not found or out of stock, please try again" << endl;
-	 cout << "(order " << orderNum << ") Enter item no: ";
-	 cin >> itemNum;
-	 cout << endl;
-	 
-	 itemLocation = invList.search(itemNum);
-       }
-     
-     //Once proper item id is entered and found in warehouse inventory,
-     //prompt user to enter amount of that item.
-     cout << "Enter amount to ship: ";
-     cin >> amountToShip;
-     cout << endl;
-     
-     //Check for input failure.
-     while (cin.fail() || amountToShip < 1)
-       {
-	 cin.clear();
-	 cin.ignore(100, '\n');
+	  canMakeMove = newReversi.makeMove(coord1, coord2, player2);
+	}
+      }
+      else if (newReversi.moveCanBeMade(player1) == true)
+	{
+	  cout << "Player 2 passes" << endl;
+	  
+	  cout << "Player 1: ";
+	  cin >> coord1 >> coord2;
+	  cout << endl;
 
-	 cout << "Enter amount to ship: ";
-	 cin >> amountToShip;
-	 cout << endl;
-       }
-     
-     //Call updateItemQuantity function, which will update the quantity
-     //or return false if user requested a number of that item that is greater
-     //than the amount in stock.
-     updateQuantity = invList.updateItemQuantity(itemLocation, amountToShip);
-     
-     //Check for input failure and if updateQuantity was returned as false.
-     //If updateQuantity was returned false, then the user requested too much
-     //of an item.
-     while (cin.fail() || updateQuantity == false || amountToShip < 1)
-       {
-	 cin.clear();
-	 cin.ignore(100, '\n');
-	 
-	 cout << "That quantity is greater than the amount in stock" << endl;
-	 cout << "Enter amount to ship: ";
-	 cin >> amountToShip;
-	 cout << endl;
-	 
-	 updateQuantity = invList.updateItemQuantity(itemLocation, amountToShip);
-       }
-     
-     //Now that itemlocation is known and user has requested amount of item,
-     //store item's price and discount amounts.
-     itemPrice = invList.getItemPrice(itemLocation);
-     itemDiscount = invList.getItemDiscount(itemLocation);
+	  canMakeMove = newReversi.makeMove(coord1, coord2, player1);
 
-     cout << "Ok shipment will be on the way shortly" << endl << endl;
+	  while (canMakeMove == false || cin.fail())
+	    {
+	      cin.clear();
+	      cin.ignore(100, '\n');
 
-     //Update total cost and discount.
-     totalCost = totalCost + float((amountToShip*itemPrice)/1000.0);
-     totalDiscounts = totalDiscounts + float((amountToShip*itemDiscount)/1000.0*(itemPrice/1000.0));
+	      cout << "Player 1: ";
+	      cin >> coord1 >> coord2;
+	      cout << endl;
 
-     //update counters for numShipments and orderNum.
-     numShipments--;
-     orderNum++;
-     
-   }
+	      canMakeMove = newReversi.makeMove(coord1, coord2, player1);
+	    }
+	}
 
-//Rest of code outputs the user's order summary.
- cout << fixed;
- cout << setprecision(2);
+      //Check if game is over.
+      gameIsOver = newReversi.isOver();
+    }
+  //Output final board and final player scores.
+  cout << endl;
+  outputBoard(newReversi, newGame, reversiBoard);
+  outputPlayerScores(player1, player2, newReversi);
 
- double costAfterDiscounts = totalCost - totalDiscounts;
-
- cout << "Invoice summary" << endl;
- cout << setw(35) << setfill(' ') << left << "Total cost" << right << totalCost << endl;
- cout << setw(35) << setfill(' ') << left << "Discounts" << right << totalDiscounts << endl;
- cout << setw(35) << setfill(' ') << left << "Total cost after discounts" << right << costAfterDiscounts << endl;
- cout << endl;
-
+  //Output who wins depending on the value of "gameIsOver".
+  if (gameIsOver == 1)
+    cout << "Player 1 wins!" << endl << endl;
+  else if (gameIsOver == -1)
+    cout << "Player 2 wins!" << endl << endl;
+  else if (gameIsOver == 0)
+    cout << "Game ends in a tie!" << endl << endl;
 
   return 0;
+}
+
+/****************************************************
+FUNCTION: Output game board.
+PARAMETERS: Reversi type, game type, and string type.
+RETURN: void.
+DESCRIPTION: User-defined function to make board output easier.
+Call reversi member function "getBoard" to store the board in
+"board." Then, double for loop outputs the board.
+ ***************************************************/
+void outputBoard(reversi newReversi, game newGame, string board)
+{
+  board = newReversi.getBoard();
+
+  for (int x = 0; x < newGame.DIMENSION; x++)
+    {
+      if (x == 0)
+        {
+          cout << "   ";
+          for(int i = 0; i < newGame.DIMENSION; i++)
+            {
+              cout << i << " ";
+            }
+          cout << endl;
+        }
+
+      cout << x;
+      cout << "  ";
+
+      for (int y = 0; y < newGame.DIMENSION; y++)
+        {
+          cout << board[newGame.DIMENSION*x + y];
+          cout << " ";
+        }
+
+
+      cout << endl;
+    }
+}
+
+/*************************************************
+FUNCTION: Output player scores.
+PARAMETERS: Two bools representing player 1 and player2,
+and one reversi parameter.
+RETURN: void.
+DESCRIPTION: Pass is p1 and p2 bools and the reversi class variable.
+Call "getScore" function from reversi class to output the score
+of each player.
+ ************************************************/
+void outputPlayerScores(bool player1, bool player2, reversi newReversi)
+{
+  cout << endl;
+  cout << "Player1 Score = ";
+  cout << newReversi.getScore(player1);
+  cout << endl;
+  cout << "Player2 Score = ";
+  cout << newReversi.getScore(player2);
+  cout << endl << endl;
 }
 
