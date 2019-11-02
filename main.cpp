@@ -1,225 +1,55 @@
-/*************************
-Assignment 4 main.cpp file
+//main.cpp file for fraction class operations.
+/*****************************************
 Dylan Durkee
-Dr. Jimi Andro-Vasko
 CS 202 - sec 1003
- ************************/
-
-//Include appropriate header/libraries.
-#include "reversi.h"
+Dr. Jimi Andro-Vasko
+Assignment 7 - operator overloading w/ fractions
+ ****************************************/
 #include <iostream>
-#include <string>
+#include "fraction.h"
 using namespace std;
-
-//Main function prototypes, one to output board and
-//one to output player scores.
-void outputBoard(reversi, game, string);
-void outputPlayerScores(bool, bool, reversi);
-
 
 int main()
 {
+  fraction f1(3, 5);
+  fraction f2(2);
+  fraction f3(3, 0);
+  fraction f4(8, 10);
+  fraction f5, f6;
+ 
+  cout << "Please enter a fraction in the form => numerator / denominator: ";
+  cin >> f5;
 
-  //Declare variables of type reversi, game, and string.
-  //String variable "reversiBoard" contains the game board.
-  reversi newReversi;
-  game newGame;
-  string reversiBoard;
-
-  cout << endl;
-
-  /*Declare two variables to represent p1 and p2, one int that
-    determines if the game is over and who wins, two wints to store
-    the coordinates typed in by user, and another bool to determine
-    if a player can make a move.
-   */
-  bool player1 = true;
-  bool player2 = false;
-  int gameIsOver = 2;
-  int coord1;
-  int coord2;
-  bool canMakeMove;
+  cout << "Please enter another fraction in the form => numerator / denominator: ";
+  cin >> f6;
   
-  //While game is not over (gameIsOver == 2), keep playing game.
-  while (gameIsOver == 2)
-    {
-      //Output board and player scores (these are user-defined functions in main)
-      outputBoard(newReversi, newGame, reversiBoard);
-      outputPlayerScores(player1, player2, newReversi);
+  cout << "f1 = " << f1 << endl;
+  cout << "f2 = " << f2 << endl;
+  cout << "f3 = " << f3 << endl;
+  cout << "f4 = " << f4 << endl;
+  cout << "f5 = " << f5 << endl;
+  cout << "f6 = " << f6 << endl << endl;
 
-      
-      /*Determine if player1 can make a move by calling moveCanBeMade function from
-	reversi class. If p1 can make a move, prompt for coordinates and check 
-	validity of the coordinates. If coords are valid, update board.
-	If p1 can't make move, prompt player2 instead.
-       */
-      if (newReversi.moveCanBeMade(player1) == true){
-      cout << "Player 1: ";
-      cin >> coord1 >> coord2;
-      cout << endl;
-
-      canMakeMove = newReversi.makeMove(coord1, coord2, player1);
   
-      while (canMakeMove == false || cin.fail())
-	{
-	  cin.clear();
-	  cin.ignore(100, '\n');
+  if (f4 == f5)
+    cout << "f4 and f5 are equal" << endl;
+  else 
+    cout << "f4 and f5 are not equal" << endl;
+  
 
-	  cout << "Player 1: ";
-	  cin >> coord1 >> coord2;
-	  cout << endl;
+  f2 = f1 - (f5 + f6 + 2 + (f1 - f3) + 1 - f5);
+  cout << "Large arithmetic expression evaluates to: " << f2 << endl;
 
-	  canMakeMove = newReversi.makeMove(coord1, coord2, player1);
-	  }
-      }
-      else if (newReversi.moveCanBeMade(player2) == true)
-	{
-	  cout << endl;
-	  cout << "Player 1 passes" << endl;
-	  
-	  cout << "Player 2: ";
-	  cin >> coord1 >> coord2;
-	  cout << endl;
+  
+  f2 = -(f5 ^ 3);
 
-	  canMakeMove = newReversi.makeMove(coord1, coord2, player2);
-	  while (canMakeMove == false || cin.fail())
-	    {
-	      cin.clear();
-	      cin.ignore(100, '\n');
-
-	      cout << "Player 2: ";
-	      cin >> coord1 >> coord2;
-	      cout << endl;
-
-	      canMakeMove = newReversi.makeMove(coord1, coord2, player2);
-	    }
-	}
-	  
-      //output board and scores.
-      outputBoard(newReversi, newGame, reversiBoard);
-      outputPlayerScores(player1, player2, newReversi);
-         
-      /*Determine if player2 can make a move by calling moveCanBeMade function from
-        reversi class. If p2 can make a move, prompt for coordinates and check
-        validity of the coordinates. If coords are valid, update board.
-        If p2 can't make move, prompt player1 instead.
-      */
-
-      if (newReversi.moveCanBeMade(player2) == true){  
-      cout << "Player 2: ";
-      cin >> coord1 >> coord2;
-      cout << endl;
-      
-      canMakeMove = newReversi.makeMove(coord1, coord2, player2);
-      while (canMakeMove == false || cin.fail())
-	{
-	  cin.clear();
-	  cin.ignore(100, '\n');
-
-	  cout << "Player 2: ";
-	  cin >> coord1 >> coord2;
-	  cout << endl;
-
-	  canMakeMove = newReversi.makeMove(coord1, coord2, player2);
-	}
-      }
-      else if (newReversi.moveCanBeMade(player1) == true)
-	{
-	  cout << "Player 2 passes" << endl;
-	  
-	  cout << "Player 1: ";
-	  cin >> coord1 >> coord2;
-	  cout << endl;
-
-	  canMakeMove = newReversi.makeMove(coord1, coord2, player1);
-
-	  while (canMakeMove == false || cin.fail())
-	    {
-	      cin.clear();
-	      cin.ignore(100, '\n');
-
-	      cout << "Player 1: ";
-	      cin >> coord1 >> coord2;
-	      cout << endl;
-
-	      canMakeMove = newReversi.makeMove(coord1, coord2, player1);
-	    }
-	}
-
-      //Check if game is over.
-      gameIsOver = newReversi.isOver();
-    }
-  //Output final board and final player scores.
-  cout << endl;
-  outputBoard(newReversi, newGame, reversiBoard);
-  outputPlayerScores(player1, player2, newReversi);
-
-  //Output who wins depending on the value of "gameIsOver".
-  if (gameIsOver == 1)
-    cout << "Player 1 wins!" << endl << endl;
-  else if (gameIsOver == -1)
-    cout << "Player 2 wins!" << endl << endl;
-  else if (gameIsOver == 0)
-    cout << "Game ends in a tie!" << endl << endl;
-
+  cout << "-(f5 ^ 3) = " << f2 << endl;
+  
+  cout << "f2 + 2.2 = " << f2 + 2.2 << endl;
+  cout << "1.1 + f5 = " << 1.1 + f5 << endl;
+  cout << "f2 - 2.2 = " << f2 - 2.2 << endl;
+  cout << "1.1 - f5 = " << 1.1 - f5 << endl;
+  
+  
   return 0;
 }
-
-/****************************************************
-FUNCTION: Output game board.
-PARAMETERS: Reversi type, game type, and string type.
-RETURN: void.
-DESCRIPTION: User-defined function to make board output easier.
-Call reversi member function "getBoard" to store the board in
-"board." Then, double for loop outputs the board.
- ***************************************************/
-void outputBoard(reversi newReversi, game newGame, string board)
-{
-  board = newReversi.getBoard();
-
-  for (int x = 0; x < newGame.DIMENSION; x++)
-    {
-      if (x == 0)
-        {
-          cout << "   ";
-          for(int i = 0; i < newGame.DIMENSION; i++)
-            {
-              cout << i << " ";
-            }
-          cout << endl;
-        }
-
-      cout << x;
-      cout << "  ";
-
-      for (int y = 0; y < newGame.DIMENSION; y++)
-        {
-          cout << board[newGame.DIMENSION*x + y];
-          cout << " ";
-        }
-
-
-      cout << endl;
-    }
-}
-
-/*************************************************
-FUNCTION: Output player scores.
-PARAMETERS: Two bools representing player 1 and player2,
-and one reversi parameter.
-RETURN: void.
-DESCRIPTION: Pass is p1 and p2 bools and the reversi class variable.
-Call "getScore" function from reversi class to output the score
-of each player.
- ************************************************/
-void outputPlayerScores(bool player1, bool player2, reversi newReversi)
-{
-  cout << endl;
-  cout << "Player1 Score = ";
-  cout << newReversi.getScore(player1);
-  cout << endl;
-  cout << "Player2 Score = ";
-  cout << newReversi.getScore(player2);
-  cout << endl << endl;
-}
-
