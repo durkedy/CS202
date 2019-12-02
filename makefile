@@ -1,12 +1,12 @@
-fraction: main.o fraction.o
-	g++ main.o fraction.o
+myString: main.o myString.o
+	g++ main.o myString.o
 
 main.o: main.cpp
 	g++ -c main.cpp
 
-fraction.o: fraction.cpp
-	g++ -c fraction.cpp
+myString.o: myString.cpp
+	g++ -c myString.cpp
 
 clean:
-	rm fraction.o
+	rm myString.o
 	rm main.o

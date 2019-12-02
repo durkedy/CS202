@@ -1,55 +1,73 @@
-//main.cpp file for fraction class operations.
-/*****************************************
+/***************************
 Dylan Durkee
-CS 202 - sec 1003
 Dr. Jimi Andro-Vasko
-Assignment 7 - operator overloading w/ fractions
- ****************************************/
+CS 202 - sec 1003
+Assignment 8 - Linked lists
+
+main.cpp file
+ **************************/
+
+#include "myString.h"
 #include <iostream>
-#include "fraction.h"
 using namespace std;
 
 int main()
 {
-  fraction f1(3, 5);
-  fraction f2(2);
-  fraction f3(3, 0);
-  fraction f4(8, 10);
-  fraction f5, f6;
- 
-  cout << "Please enter a fraction in the form => numerator / denominator: ";
-  cin >> f5;
+  myString str1('Z');
+  myString str2("Im Mr Meeseeks!");
+  myString str3;
+  cout << "Enter a string for str3: ";
+  cin >> str3;
 
-  cout << "Please enter another fraction in the form => numerator / denominator: ";
-  cin >> f6;
-  
-  cout << "f1 = " << f1 << endl;
-  cout << "f2 = " << f2 << endl;
-  cout << "f3 = " << f3 << endl;
-  cout << "f4 = " << f4 << endl;
-  cout << "f5 = " << f5 << endl;
-  cout << "f6 = " << f6 << endl << endl;
+  cout << endl << "Initial strings" << endl;
+  cout << "str1 = " << str1 << endl;
+  cout << "str2 = " << str2 << endl;
+  cout << "str3 = " << str3 << endl << endl;
+
+  for (int i = 0; i < str2.length()-1; i++)
+    str2[i] = toupper(str2[i]);
 
   
-  if (f4 == f5)
-    cout << "f4 and f5 are equal" << endl;
-  else 
-    cout << "f4 and f5 are not equal" << endl;
-  
+  str1 = str2 + " Look at me";
 
-  f2 = f1 - (f5 + f6 + 2 + (f1 - f3) + 1 - f5);
-  cout << "Large arithmetic expression evaluates to: " << f2 << endl;
+  cout << "str1 = " << str1 << endl;
 
-  
-  f2 = -(f5 ^ 3);
+  myString str4(str1);
 
-  cout << "-(f5 ^ 3) = " << f2 << endl;
-  
-  cout << "f2 + 2.2 = " << f2 + 2.2 << endl;
-  cout << "1.1 + f5 = " << 1.1 + f5 << endl;
-  cout << "f2 - 2.2 = " << f2 - 2.2 << endl;
-  cout << "1.1 - f5 = " << 1.1 - f5 << endl;
-  
-  
+  str1 = str1 + str3;
+  cout << "str1 = " << str1 << endl;
+
+  str1 = "Whatever" + str3;
+  cout << "str1 = " << str1 << endl;
+
+  str1 = "Hi Folk";
+  cout << "str1 = " << str1 << endl;
+
+  str1 = str1 + 's';
+  cout << "str1 = " << str1 << endl;
+
+  str1 = '_' + str1;
+  cout << "str1 = " << str1 << endl;
+
+  str2 = str1;
+
+  str3 = 'Y';
+
+  cout << endl << "Almost done" << endl;
+  cout << "str1 = " << str1 << endl;
+  cout << "str2 = " << str2 << endl;
+  cout << "str3 = " << str3 << endl << endl;
+
+  if (str1 == str2)
+    cout << "str1 equals str2" << endl;
+
+  if (str1 != str2)
+    cout << "str1 does not equal str3" << endl;
+
+  str1 = "supercalifragilisticexpialiocious";
+
+  str1.erase(11,12);
+
+  cout << "str1.erase(11, 12) = " << str1 << endl;
   return 0;
 }
